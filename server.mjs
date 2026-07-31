@@ -385,6 +385,8 @@ export function handler(request, response) {
   }
 }
 
+export default handler;
+
 // Keep the local Docker/Node entry point while letting Vercel import the same handler.
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const server = createServer(handler);
