@@ -5,6 +5,17 @@ const template = document.querySelector("#reading-template");
 const tabs = [...document.querySelectorAll(".book-tab")];
 let activeBookId = "tolstoy";
 let currentReadings = [];
+const coverPreloads = new Map();
+
+function preloadCover(bookId) {
+  if (coverPreloads.has(bookId)) return;
+
+  const image = new Image();
+  image.decoding = "async";
+  image.fetchPriority = "high";
+  image.src = `/covers/${encodeURIComponent(bookId)}`;
+  coverPreloads.set(bookId, image);
+}
 
 function dateForInput(date) {
   const year = date.getFullYear();
@@ -32,8 +43,16 @@ function renderReading(reading) {
   const entryTitle = fragment.querySelector(".entry-title");
   const entryBody = fragment.querySelector(".entry-body");
 
-  cover.src = reading.cover;
+  preloadCover(reading.id);
   cover.alt = `Couverture de ${reading.title}`;
+  cover.width = 74;
+  cover.height = 106;
+  cover.decoding = "async";
+  cover.fetchPriority = "high";
+  cover.classList.add("is-loading");
+  cover.addEventListener("load", () => cover.classList.replace("is-loading", "is-loaded"), { once: true });
+  cover.addEventListener("error", () => cover.classList.remove("is-loading"), { once: true });
+  cover.src = reading.cover;
   title.textContent = reading.title;
   author.textContent = reading.author;
   card.classList.add(`reading-card--${reading.id}`);
@@ -58,11 +77,13 @@ function renderReadings() {
 
 function selectBook(id) {
   activeBookId = id;
+  preloadCover(id);
   tabs.forEach((tab) => tab.setAttribute("aria-selected", String(tab.dataset.book === id)));
   renderReadings();
 }
 
 async function loadDay(value) {
+  preloadCover(activeBookId);
   readingsElement.setAttribute("aria-busy", "true");
   readingsElement.replaceChildren(Object.assign(document.createElement("div"), { className: "loading", textContent: "Préparation des lectures..." }));
 

@@ -343,7 +343,7 @@ export function handler(request, response) {
 
     try {
       const image = book.archive.read(book.cover);
-      response.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "private, no-store" });
+      response.writeHead(200, { "Content-Type": "image/jpeg", "Cache-Control": "private, max-age=604800" });
       response.end(image);
     } catch {
       return sendJson(response, 404, { error: "Couverture introuvable." });
