@@ -1,0 +1,12 @@
+{
+  "name": "wisdom365",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lectures quotidiennes depuis deux EPUB personnels.",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

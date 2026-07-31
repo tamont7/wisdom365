@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#113b3c" />
+    <title>Wisdom365</title>
+    <link rel="stylesheet" href="/styles.css?v=11" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="day-heading" aria-labelledby="date-label">
+        <h1 id="date-label" aria-live="polite"></h1>
+        <div class="day-controls" aria-label="Choisir une date">
+          <button class="icon-button" id="previous-day" type="button" aria-label="Jour précédent" title="Jour précédent">&#8592;</button>
+          <label class="date-picker" for="date-input">
+            <span class="visually-hidden">Date à consulter</span>
+            <input id="date-input" type="date" />
+          </label>
+          <button class="icon-button" id="next-day" type="button" aria-label="Jour suivant" title="Jour suivant">&#8594;</button>
+          <button class="today-button" id="today-button" type="button">Aujourd'hui</button>
+        </div>
+        <div class="book-tabs" role="tablist" aria-label="Choisir un livre">
+          <button class="book-tab" id="tab-tolstoy" type="button" role="tab" aria-selected="true" data-book="tolstoy">A Calendar of Wisdom</button>
+          <button class="book-tab" id="tab-nepo" type="button" role="tab" aria-selected="false" data-book="nepo">The Book of Awakening</button>
+          <button class="book-tab" id="tab-tao" type="button" role="tab" aria-selected="false" data-book="tao">365 Tao</button>
+        </div>
+      </section>
+
+      <section class="readings" id="readings" aria-live="polite" aria-busy="true">
+        <div class="loading">Préparation des lectures...</div>
+      </section>
+    </main>
+    <template id="reading-template">
+      <article class="reading-card">
+        <div class="book-meta">
+          <img class="book-cover" alt="" />
+          <div>
+            <p class="book-author"></p>
+            <h2 class="book-title"></h2>
+          </div>
+        </div>
+        <div class="entry">
+          <h3 class="entry-title"></h3>
+          <div class="entry-body"></div>
+        </div>
+      </article>
+    </template>
+    <script src="/app.js?v=11"></script>
+  </body>
+</html>
