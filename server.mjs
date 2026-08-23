@@ -33,6 +33,18 @@ const BOOKS = [
     chapters: /^OEBPS\/text\/9780062306852_Chapter_\d+\.xhtml$/,
     cover: "OEBPS/images/cover.jpg",
     entryKind: "numbered"
+  },
+  {
+    id: "rumi",
+    title: "The Rumi Daybook",
+    author: "Rumi · trad. Kabir Helminski",
+    epub: resolve(ROOT, "epubs/The Rumi Daybook_ 365 Poems and Teachings from the Beloved -- Rumi (Jalal ad-Din Muhammad ar-Rumi); Camille Helminski; -- Penguin Random House LLC -- isbn13 9780834827738 -- 62ef865dc1e233228bbbe407b90abaa9 -- Anna’s Archiv.epub"),
+    chapters: /^OEBPS\/\d+_chapter-title-\d+\.html$/,
+    cover: "OEBPS/images/cover.jpg",
+    entryKind: "numbered",
+    dayPattern: /_chapter-title-(\d+)\.html$/,
+    titlePattern: /<p\b[^>]*\bclass\s*=\s*["'][^"']*\btextstyle8\b[^"']*["'][^>]*>([\s\S]*?)<\/p>/i,
+    endMatter: /<div\b[^>]*\bstyle\s*=\s*["'][^"']*\bpage-break-before\s*:[^"']*["'][^>]*>[\s\S]*$/i
   }
 ];
 
@@ -177,6 +189,8 @@ function readingHtml(fragment, book, chapter) {
       if (closing) return "</p>";
       const classes = tag.match(/\bclass\s*=\s*["']([^"']*)["']/i)?.[1].split(/\s+/) || [];
       if (classes.includes("right")) return '<p class="epub-attribution">';
+      const poemClass = classes.find((candidate) => ["poem", "poem1", "poem2", "poemb"].includes(candidate));
+      if (book.id === "rumi" && poemClass) return `<p class="epub-poem epub-poem--${poemClass}">`;
       return "<p>";
     }
     if (!allowedTags.has(name)) return "";
@@ -204,16 +218,17 @@ function indexNumberedBook(book, archive, chapters) {
   const entries = new Map();
 
   for (const chapter of chapters) {
-    const number = Number.parseInt(chapter.match(/_Chapter_(\d+)\.xhtml$/)?.[1], 10);
+    const number = Number.parseInt(chapter.match(book.dayPattern || /_Chapter_(\d+)\.xhtml$/)?.[1], 10);
     if (!Number.isInteger(number) || number < 1 || number > 365) continue;
 
     const html = archive.text(chapter);
     const bodyHtml = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] || html;
-    const titleMatch = bodyHtml.match(/<h1\b[^>]*\bclass\s*=\s*["'][^"']*\bchtitle\b[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i);
+    const titleMatch = bodyHtml.match(book.titlePattern || /<h1\b[^>]*\bclass\s*=\s*["'][^"']*\bchtitle\b[^"']*["'][^>]*>([\s\S]*?)<\/h1>/i);
     const title = titleMatch ? htmlToText(titleMatch[1]) : null;
-    const entryFragment = bodyHtml.replace(/<h1\b[^>]*>[\s\S]*?<\/h1>/gi, "");
-    const body = htmlToText(entryFragment);
-    const htmlBody = readingHtml(entryFragment, book, chapter);
+    const entryFragment = titleMatch ? bodyHtml.replace(titleMatch[0], "") : bodyHtml;
+    const contentFragment = book.endMatter ? entryFragment.replace(book.endMatter, "") : entryFragment;
+    const body = htmlToText(contentFragment);
+    const htmlBody = readingHtml(contentFragment, book, chapter);
 
     if (body) entries.set(keyForNumberedDay(number), { title, body, html: htmlBody });
   }

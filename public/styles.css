@@ -57,6 +57,10 @@ h1 { margin: 0; color: #123d3e; font-size: 2rem; font-weight: 400; line-height: 
 .entry-body ul li::marker, .entry-body ol li::marker { color: #cf6047; font-weight: 700; }
 .entry-body .epub-attribution { margin-top: -9px; color: #637e7b; font-size: .78rem; letter-spacing: .04em; text-align: right; text-transform: uppercase; }
 .entry-body .epub-image { display: block; width: 100%; max-width: 280px; max-height: 180px; margin: 4px auto 25px; object-fit: contain; }
+.reading-card--rumi .entry-body .epub-poem { margin: 0 0 0 1.25em; text-indent: -1.25em; text-align: left; }
+.reading-card--rumi .entry-body .epub-poem--poem { margin-left: 2em; text-indent: -1em; }
+.reading-card--rumi .entry-body .epub-poem--poem2,
+.reading-card--rumi .entry-body .epub-poem--poemb { margin-bottom: 1em; }
 .loading, .error-message { grid-column: 1 / -1; padding: 42px 0; color: #56716e; font-size: 1.15rem; text-align: center; }
 .error-message { color: #a14332; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
@@ -69,8 +73,8 @@ h1 { margin: 0; color: #123d3e; font-size: 2rem; font-weight: 400; line-height: 
   .day-controls .date-picker { width: 100%; justify-content: center; }
   .day-controls .date-picker input { width: 100%; text-align: center; }
   .today-button { grid-column: 1 / -1; width: 100%; margin: 0; }
-  .book-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 20px; overflow: visible; }
-  .book-tab { min-height: 56px; padding: 8px 6px; font-size: .74rem; line-height: 1.2; text-align: center; white-space: normal; }
+  .book-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin-top: 20px; overflow: visible; }
+  .book-tab { min-height: 56px; padding: 8px 3px; font-size: .7rem; line-height: 1.2; text-align: center; white-space: normal; }
   .readings { grid-template-columns: 1fr; gap: 18px; padding-top: 22px; }
   .book-meta { min-height: 132px; padding: 19px; }
   .book-cover { width: 62px; height: 89px; }
