@@ -60,7 +60,8 @@ function renderReading(reading) {
   if (reading.entry) {
     entryTitle.textContent = reading.entry.title || "Réflexion du jour";
     entryBody.innerHTML = reading.entry.html;
-    entryBody.querySelector("p")?.classList.add("lead-paragraph");
+    const firstParagraph = entryBody.querySelector("p");
+    if (!firstParagraph?.classList.contains("epub-poem")) firstParagraph?.classList.add("lead-paragraph");
   } else {
     entryTitle.textContent = "Pas de lecture pour cette date";
     const empty = document.createElement("p");
